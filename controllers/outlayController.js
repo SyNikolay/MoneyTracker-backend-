@@ -11,14 +11,14 @@ class OutlayController {
     const category = await Category.findOne({ where: { name: name } });
     const outlay = await Outlay.findOne({ where: { name: name } });
     const updBallance = category.balance - outlay.balance;
-    
-    await category.update({balance: updBallance});
+
+    await category.update({ balance: updBallance });
     outlay.destroy();
-    
+
     return res.json({
       message: 'success',
-    })
+    });
   }
 }
 
-export default new OutlayController()
+export default new OutlayController();
