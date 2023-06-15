@@ -6,7 +6,7 @@ const router = new Router();
 
 router.post('/create', CategoryController.create);
 router.post('/delete', CategoryController.delete);
-router.get('/get-all', CategoryController.getAll); // , roleHandler('USER')
-router.get('/get-all-categories', CategoryController.getAllCategories);
+router.post('/get-all', CategoryController.getAll); // , roleHandler('USER')
+router.post('/get-all-categories', CategoryController.getAllCategories);
 
 export default router;
