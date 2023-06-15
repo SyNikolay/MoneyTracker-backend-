@@ -2,15 +2,15 @@ import { Category, Outlay } from '../models/models.js';
 
 class CategoryController {
   async create(req, res, next) {
-    const { name, balance, comment } = req.body;
+    const { userId, name, balance, comment } = req.body;
     const caseName = name[0].toUpperCase() + name.slice(1);
-    const newCategory = await Category.findOne({ where: { name: caseName } });
-    const newOutlay = await Outlay.create({ name: caseName, balance, comment });
+    const newCategory = await Category.findOne({ where: { name: caseName, userId: userId } });
+    const newOutlay = await Outlay.create({ name: caseName, balance, comment, userId });
     if (newCategory) {
       const updCategory = await newCategory.update({ balance: +newCategory.balance + +balance });
       return res.json(updCategory);
     }
-    const category = await Category.create({ name: caseName, balance });
+    const category = await Category.create({ name: caseName, balance, userId });
     return res.json(category);
   }
 
@@ -25,16 +25,21 @@ class CategoryController {
   }
 
   async getAll(req, res) {
-    const categories = await Category.findAll();
+    const { userId } = req.body;
+    const categories = await Category.findAll({ where: { userId } });
     return res.json(categories);
   }
 
   async getAllCategories(req, res) {
-    const categories = await Category.findAll();
-    const allCategoriesArray = [];
-    categories.forEach((el) => allCategoriesArray.push(el.name));
+    const { userId } = req.body;
+    const categories = await Category.findAll({ where: { userId } });
+    if (categories.length > 0) {
+      const allCategoriesArray = [];
+      categories.forEach((el) => allCategoriesArray.push(el.name));
 
-    return res.json(allCategoriesArray);
+      return res.json(allCategoriesArray);
+    }
+    return res.json([]);
   }
 }
 

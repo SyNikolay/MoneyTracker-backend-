@@ -29,7 +29,10 @@ class UserController {
     const user = await User.create({ email, role, password: hasPassword });
     const token = generateJwt(user);
 
-    return res.json({ token });
+    return res.json({
+      token,
+      message: 'Пользователь успешно зарегистрирован',
+    });
   }
 
   async login(req, res, next) {
