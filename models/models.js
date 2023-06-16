@@ -6,6 +6,7 @@ const User = sequelize.define('user', {
   email: { type: DataTypes.STRING, unique: true },
   password: { type: DataTypes.STRING },
   role: { type: DataTypes.STRING },
+  ballance: { type: DataTypes.INTEGER},
 });
 
 const Category = sequelize.define('category', {

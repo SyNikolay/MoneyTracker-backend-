@@ -12,7 +12,6 @@ class OutlayController {
     const category = await Category.findOne({ where: { name: name, userId: userId } });
     const outlay = await Outlay.findOne({ where: { name: name, userId: userId } });
     const updBallance = category.balance - outlay.balance;
-    8;
     await category.update({ balance: updBallance });
     outlay.destroy();
 
