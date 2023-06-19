@@ -4,7 +4,12 @@ class OutlayController {
   async getAll(req, res) {
     const { userId } = req.body;
     const outlays = await Outlay.findAll({ where: { userId } });
-    return res.json(outlays);
+
+    let sumOutlays = 0;
+
+    outlays.forEach((el) => (sumOutlays = sumOutlays + el.balance));
+
+    return res.json({ outlays, sumOutlays });
   }
 
   async delete(req, res) {
