@@ -9,7 +9,7 @@ const generateJwt = (user) => {
       id: user.id,
       email: user.email,
       role: user.role,
-      ballance: user.ballance
+      ballance: user.ballance,
     },
     process.env.SECRET_KEY,
     { expiresIn: '24h' }
@@ -71,7 +71,7 @@ class UserController {
         updBallance = user.ballance - sum;
       }
 
-      await user.update({ ballance: updBallance })
+      await user.update({ ballance: updBallance });
     }
 
     return res.json({ ballance: user.ballance });
@@ -81,7 +81,7 @@ class UserController {
     const { id } = req.body;
     const user = await User.findOne({ where: { id } });
 
-    return res.json({ ballance: user.ballance  });
+    return res.json({ ballance: user.ballance });
   }
 }
 
