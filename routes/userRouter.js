@@ -9,5 +9,6 @@ router.post('/login', UserController.login);
 router.post('/auth', authHandler, UserController.auth);
 router.post('/ballance', authHandler, UserController.getBallance);
 router.post('/set-ballance', authHandler, UserController.setBallance);
+router.post('/update', authHandler, UserController.update);
 
 export default router;
