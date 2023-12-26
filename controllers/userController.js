@@ -1,20 +1,13 @@
 import bcrypt from 'bcrypt';
+import { fileURLToPath } from "url";
+import { v4 as uuidv4 } from 'uuid';
+import path from 'path';
 import ApiError from '../error/ApiError.js';
-import jwt from 'jsonwebtoken';
 import { User } from '../models/models.js';
+import { generateJwt } from '../utils/generateJwt.js';
 
-const generateJwt = (user) => {
-  return jwt.sign(
-    {
-      id: user.id,
-      email: user.email,
-      role: user.role,
-      ballance: user.ballance,
-    },
-    process.env.SECRET_KEY,
-    { expiresIn: '24h' }
-  );
-};
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 class UserController {
   async registration(req, res, next) {
@@ -27,13 +20,40 @@ class UserController {
       return next(ApiError.badRequest('Пользователь с таким email уже существует'));
     }
     const hasPassword = await bcrypt.hash(password, 5);
-    const user = await User.create({ email, role, password: hasPassword, ballance: 0 });
+    const user = await User.create({ email, role, password: hasPassword });
     const token = generateJwt(user);
 
     return res.json({
       token,
       message: 'Пользователь успешно зарегистрирован',
     });
+  }
+
+  async update(req, res, next) {
+    try {
+      const { id, salary, work, name, surname } = req.body;
+
+      const user = await User.findOne({ where: { id: id } });
+
+      if (!!req.files) {
+        const { avatar } = req.files
+        let fileName = uuidv4() + '.jpg';
+
+        avatar.mv(path.resolve(__dirname, '..', 'static', fileName));
+        await user.update({ avatar: fileName });
+      }
+
+      salary && await user.update({ salary });
+      work && await user.update({ work });
+      name && await user.update({ name });
+      surname && await user.update({ surname });
+
+      const token = generateJwt(user);
+
+      return res.json({ token });
+    } catch (error) {
+      next(ApiError.badRequest('Error'))
+    }
   }
 
   async login(req, res, next) {

@@ -5,8 +5,13 @@ const User = sequelize.define('user', {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
   email: { type: DataTypes.STRING, unique: true },
   password: { type: DataTypes.STRING },
-  role: { type: DataTypes.STRING },
-  ballance: { type: DataTypes.INTEGER },
+  role: { type: DataTypes.STRING, defaultValue: 'USER' },
+  ballance: { type: DataTypes.INTEGER, defaultValue: 0 },
+  name: { type: DataTypes.STRING, allowNull: true },
+  surname: { type: DataTypes.STRING, allowNull: true },
+  work: { type: DataTypes.STRING, allowNull: true },
+  salary: { type: DataTypes.STRING, allowNull: true },
+  avatar:  { type: DataTypes.STRING, allowNull: true },
 });
 
 const Category = sequelize.define('category', {
